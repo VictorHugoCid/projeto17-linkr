@@ -44,6 +44,7 @@ export async function signIn(req, res) {
         const token = jwt.sign({ userId: user.rows[0].id }, secretKey, config);
         const userId = user.rows[0].id
         await authRepository.signIn(userId, token, true)
+        
         res.status(201).send( {token, userId} );
 
     } catch (error) {
