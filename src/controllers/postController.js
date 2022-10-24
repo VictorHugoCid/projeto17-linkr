@@ -60,9 +60,8 @@ async function GetPost(req, res) {
       posts."createdAt"
       FROM posts
       JOIN users ON posts."userId" = users.id
-      JOIN likes ON users.id = likes."userId"
+      JOIN likes ON posts.id = likes."postId"
       ORDER BY posts."createdAt" DESC`
-    
   );
   console.log(getPosts.rows)
 
@@ -76,6 +75,7 @@ async function GetPost(req, res) {
 
   const ArrayPost = getPosts;
   const ArrayCount = getCount;
+  // console.log(ArrayPost.rows)
 
   let i = 0;
   const BodyArray = [];
@@ -112,6 +112,7 @@ async function GetPost(req, res) {
     }); 
     i++;
   });
+  // console.log(BodyArray)
   res.status(201).send(BodyArray);
 }
 
