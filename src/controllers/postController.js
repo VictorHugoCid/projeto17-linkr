@@ -68,8 +68,53 @@ async function GetPost(req, res) {
         FROM likes
         GROUP BY likes."postId") l ON posts.id = l."postId"
       ORDER BY posts."createdAt" DESC`
-  )
-  res.status(201).send(getPosts.rows);
+  );
+
+  const getCount = await connection.query(
+    `SELECT
+      likes."postId",
+      COUNT(likes."postId") as "count"
+      FROM likes
+      GROUP BY likes."postId"`
+  );
+
+  const ArrayPost = getPosts;
+  const ArrayCount = getCount;
+
+  let i = 0;
+  const BodyArray = [];
+  getPosts.rows.map((p) => {
+    if (i > getPosts.rowCount) return;
+    let j = 0;
+    getCount.rows.map(() => {
+      if (getCount.rows[j].postId === getPosts.rows[i].postId) {
+        BodyArray.push({
+          postId: getPosts.rows[i].postId,
+          username: getPosts.rows[i].name,
+          userId: getPosts.rows[i].userId,
+          img: getPosts.rows[i].pictureUrl,
+          text: getPosts.rows[i].text,
+          link: getPosts.rows[i].link,
+          likesQtd: parseInt(getCount.rows[j].count),
+          liked: getPosts.rows[i].liked,
+        });
+      } else {
+        BodyArray.push({
+          postId: getPosts.rows[i].postId,
+          username: getPosts.rows[i].name,
+          userId: getPosts.rows[i].userId,
+          img: getPosts.rows[i].pictureUrl,
+          text: getPosts.rows[i].text,
+          link: getPosts.rows[i].link,
+          likesQtd: 0,
+          liked: getPosts.rows[i].liked,
+        });
+      }
+      j++;
+    });
+    i++;
+  });
+  res.status(201).send(BodyArray);
 }
 
 async function EditPost(req, res) {
@@ -95,7 +140,6 @@ async function EditPost(req, res) {
 async function DeletePost(req, res) {
   const { id } = req.params;
   try {
-    // await connection.query("DELETE FROM posts WHERE id = $1", [id]);
     await postRepository.deletePost(id);
     res.status(204).send({ message: "menssagem deletada" });
   } catch (error) {
