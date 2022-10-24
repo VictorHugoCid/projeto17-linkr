@@ -82,6 +82,7 @@ export async function signIn(req, res) {
 export async function signOut(req, res) {
     const userId = res.locals.userId;
     const token = res.locals.token;
+    console.log(userId);
 
     try {
 
