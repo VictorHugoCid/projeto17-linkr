@@ -20,7 +20,6 @@ async function signOut(userId, token) {
     return connection.query(query, [userId, token]);
 }
 
-
 const authRepository = {
 	signUp,
     getUserByEmail,

@@ -87,6 +87,7 @@ async function GetPost(req, res) {
 
       if (getCount.rows[j].postId === getPosts.rows[i].postId) {
         BodyArray.push({
+          postId: getPosts.rows[i].postId,
           username: getPosts.rows[i].name,
           userId: getPosts.rows[i].userId,
           img: getPosts.rows[i].pictureUrl,
@@ -97,6 +98,7 @@ async function GetPost(req, res) {
         })
       } else {
         BodyArray.push({
+          postId: getPosts.rows[i].postId,
           username: getPosts.rows[i].name,
           userId: getPosts.rows[i].userId,
           img: getPosts.rows[i].pictureUrl,
@@ -146,7 +148,6 @@ async function EditPost(req, res) {
 async function DeletePost(req, res) {
   const { id } = req.params;
   try {
-    // await connection.query("DELETE FROM posts WHERE id = $1", [id]);
     await postRepository.deletePost(id);
     res.status(204).send({ message: "menssagem deletada" });
   } catch (error) {
