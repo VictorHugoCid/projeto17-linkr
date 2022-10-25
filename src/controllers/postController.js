@@ -44,18 +44,18 @@ async function CreatePost(req, res) {
 async function GetPost(req, res) {
   const getPosts = await connection.query(
     `SELECT 
-      posts.id AS "postId",
-      posts.text,
-      posts.link,
-      users.name,
-      users.id AS "userId",
-      users."pictureUrl",
-      likes.liked,
-      posts."createdAt"
-      FROM posts
-      JOIN users ON posts."userId" = users.id
-      JOIN likes ON users.id = likes."userId"
-      ORDER BY posts."createdAt" DESC`
+    posts.id AS "postId",
+    posts.text,
+    posts.link,
+    users.name,
+    users.id AS "userId",
+    users."pictureUrl",
+    likes.liked,
+    posts."createdAt"
+    FROM posts
+    JOIN users ON posts."userId" = users.id
+    JOIN likes ON posts.id = likes."postId"
+    ORDER BY posts."createdAt" DESC`
   );
 
   const getCount = await connection.query(

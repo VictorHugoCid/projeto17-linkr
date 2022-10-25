@@ -3,7 +3,7 @@ import { getHashtagPosts, getTrendingHashtags} from "../controllers/hashtagContr
 import { loggedUser } from "../middlewares/authMiddleware.js";  
 const router = express.Router();
 
-router.get('/hashtag/:hashtag', getHashtagPosts);
+router.get('/hashtag/:hashtag', loggedUser, getHashtagPosts);
 router.get('/trending', getTrendingHashtags);
 
 
